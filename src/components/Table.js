@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {confirm} from 'react'
+// import { confirm } from 'react'
 import '../App.css'
 import MaterialTable from 'material-table'
 
@@ -22,7 +22,6 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
-
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -68,23 +67,24 @@ function Table() {
             type: 'integer',
             cellStyle: {
                 backgroundColor: '#85929E',
+                textAlign: 'center',
                 color: '#0f3057',
                 width: '5%',
             },
             headerStyle: {
                 backgroundColor: '#333FFF',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 15,
                 width: '5%',
                 fontWeight: 'bold',
-                align: 'center',
             },
         },
         {
             title: 'Nome',
             field: 'nome',
             type: 'text',
-            validate: rowData => rowData.name !=='',
+            validate: (rowData) => rowData.name !== '',
             cellStyle: {
                 backgroundColor: '#E8E8E8',
                 color: '#0f3057',
@@ -105,12 +105,14 @@ function Table() {
             type: 'date',
             cellStyle: {
                 backgroundColor: '#E8E8E8',
+                textAlign: 'center',
                 color: '#0f3057',
                 width: '12%',
                 validate: (rowData) => rowData.dataDeCirurgia !== '',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
@@ -122,11 +124,13 @@ function Table() {
             field: 'tipoDeCirurgia',
             cellStyle: {
                 backgroundColor: '#E8E8E8',
+                textAlign: 'center',
                 color: '#0f3057',
                 width: '20%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
@@ -138,11 +142,13 @@ function Table() {
             field: 'convenio',
             cellStyle: {
                 backgroundColor: '#E8E8E8',
+                textAlign: 'center',
                 color: '#0f3057',
                 width: '18%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
@@ -155,11 +161,13 @@ function Table() {
             type: 'currency',
             cellStyle: {
                 backgroundColor: '#E8E8E8',
+                textAlign: 'left',
                 color: '#0f3057',
                 width: '8%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
+                textAlign: 'left',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
@@ -171,36 +179,37 @@ function Table() {
             field: 'recebidoPor',
             cellStyle: {
                 backgroundColor: '#E8E8E8',
+                textAlign: 'left',
                 color: '#0f3057',
                 width: '12%',
-                
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
                 width: '12%',
-                
             },
         },
         {
             title: 'Pago',
             field: 'pago',
+            lookup: { sim: 'SIM', nao: 'NÃO' },
             cellStyle: {
                 backgroundColor: '#E8E8E8',
+                textAlign: 'center',
                 color: '#0f3057',
                 width: '5%',
                 sorting: 'boolean',
-                
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
+                textAlign: 'center',
                 width: '5%',
-                
             },
         },
     ]
@@ -218,16 +227,16 @@ function Table() {
             <MaterialTable
                 title="Cirurgias Realizadas"
                 style={{
-                    backgroundColor: '#d3d6db',
+                    backgroundColor: '#AEB6BF',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    fontSize: 14,
+                    color: 'blue',
                 }}
                 data={data}
                 columns={columns}
                 icons={tableIcons}
                 editable={{
-                    isEditable: (rowData) => rowData.name === 'a', // only name(a) rows would be editable
-                    isEditHidden: (rowData) => rowData.name === 'x',
-                    isDeletable: (rowData) => rowData.name === 'b', // only name(b) rows would be deletable,
-                    isDeleteHidden: (rowData) => rowData.name === 'y',
                     onBulkUpdate: (changes) =>
                         new Promise((resolve, reject) => {
                             setTimeout(() => {
@@ -271,7 +280,6 @@ function Table() {
                             }, 1000)
                         }),
                 }}
-
                 options={{
                     search: true,
                     paging: false,
@@ -288,25 +296,30 @@ function Table() {
                 }}
                 cellEditable={{
                     cellStyle: {},
-                    onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
+                    onCellEditApproved: (
+                        newValue,
+                        oldValue,
+                        rowData,
+                        columnDef
+                    ) => {
                         return new Promise((resolve, reject) => {
-                            console.log('newValue: ' + newValue);
-                            setTimeout(resolve, 4000);
-                        });
-                    }
-                }}
-                actions={[
-                    {
-                      icon: 'save',
-                      tooltip: 'Save User',
-                      onClick: (event, rowData) => alert("You saved " + rowData.name)
+                            console.log('newValue: ' + newValue)
+                            setTimeout(resolve, 4000)
+                        })
                     },
-                    {
-                      icon: 'delete',
-                      tooltip: 'Delete User',
-                      onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
-                    }
-                  ]}
+                }}
+                // actions={[
+                //     {
+                //       icon: 'save',
+                //       tooltip: 'Save User',
+                //       onClick: (event, rowData) => alert("You saved " + rowData.name)
+                //     },
+                //     {
+                //       icon: 'delete',
+                //       tooltip: 'Delete User',
+                //       onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
+                //     }
+                //   ]}
             />
         </div>
     )
