@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-// import { confirm } from 'react'
 import '../App.css'
 import MaterialTable from 'material-table'
 
@@ -22,6 +21,7 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
+import AccountCircle from '@material-ui/icons/AccountCircle'
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -280,6 +280,43 @@ function Table() {
                             }, 1000)
                         }),
                 }}
+                detailPanel={[
+                    {
+                        tooltip: 'Show Name',
+                        render: (rowData) => {
+                            return (
+                                <div
+                                    style={{
+                                        fontSize: 100,
+                                        textAlign: 'center',
+                                        color: 'white',
+                                        backgroundColor: '#43A047',
+                                    }}
+                                >
+                                    {rowData.nome}
+                                </div>
+                            )
+                        },
+                    },
+                    {
+                        icon: () => <AccountCircle />,
+                        tooltip: 'Show Surname',
+                        render: (rowData) => {
+                            return (
+                                <div
+                                    style={{
+                                        fontSize: 100,
+                                        textAlign: 'center',
+                                        color: 'white',
+                                        backgroundColor: '#E53935',
+                                    }}
+                                >
+                                    {rowData.surname}
+                                </div>
+                            )
+                        },
+                    },
+                ]}
                 options={{
                     search: true,
                     paging: false,
@@ -293,6 +330,7 @@ function Table() {
                                 ? '#EEE'
                                 : '#FFF',
                     }),
+                    exportButton: true,
                 }}
                 cellEditable={{
                     cellStyle: {},
@@ -303,23 +341,30 @@ function Table() {
                         columnDef
                     ) => {
                         return new Promise((resolve, reject) => {
-                            console.log('newValue: ' + newValue)
+                            const index = data.findIndex(
+                                (dados) => dados.id === rowData.id
+                            )
+                            data[index][columnDef.field] = newValue
+                            setData(data)
                             setTimeout(resolve, 4000)
                         })
                     },
                 }}
-                // actions={[
-                //     {
-                //       icon: 'save',
-                //       tooltip: 'Save User',
-                //       onClick: (event, rowData) => alert("You saved " + rowData.name)
-                //     },
-                //     {
-                //       icon: 'delete',
-                //       tooltip: 'Delete User',
-                //       onClick: (event, rowData) => confirm("You want to delete " + rowData.name)
-                //     }
-                //   ]}
+                actions={[
+                    {
+                        icon: () => <DeleteOutline />,
+                        tooltip: 'Delete User',
+                        onClick: (event, rowData) => {
+                            const newData = data.filter(
+                                (dados) =>
+                                    !rowData.some(
+                                        (data) => data.id === dados.id
+                                    )
+                            )
+                            setData(newData)
+                        },
+                    },
+                ]}
             />
         </div>
     )
