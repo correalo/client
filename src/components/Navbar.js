@@ -1,20 +1,45 @@
-import React, { Button, Row, Col } from 'react'
+import React from 'react'
+import { makeStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+}))
 
-const Navbar = () => {
+export default function Navbar() {
+    const classes = useStyles()
+
     return (
-        <Row className="mx-0">
-            <Button as={Col} variant="primary">
-                Button #1
-            </Button>
-            <Button as={Col} variant="secondary" className="mx-2">
-                Button #2
-            </Button>
-            <Button as={Col} variant="success">
-                Button #3
-            </Button>
-        </Row>
+        <div className={classes.root}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        edge="start"
+                        className={classes.menuButton}
+                        color="inherit"
+                        aria-label="menu"
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                        Auxílio de Cirurgias
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+        </div>
     )
 }
-export default Navbar

@@ -1,18 +1,14 @@
 import React from 'react'
 
-
-
-
 function Header() {
     return (
         <header>
             <div className="titulo">
-                <h1 style={{ color: 'orange' }}>
+                <h1 style={{ color: 'yellow' }}>
                     {' '}
                     Cirurgias com Dr Eduardo Yassushi{' '}
                 </h1>
-                <span style={{ color: 'orange' }}> CRM 90.784 </span>    
-                
+                <span style={{ color: 'yellow' }}> CRM 90.784 </span>
             </div>
         </header>
     )
