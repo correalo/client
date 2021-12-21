@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../App.css'
-import MaterialTable from 'material-table'
+import MaterialTable, { MTablePagination } from 'material-table'
+import { TablePagination } from '@material-ui/core'
 
 // import MaterialTable, { MTableToolbar } from 'material-table';
 
@@ -21,7 +22,7 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
-import AccountCircle from '@material-ui/icons/AccountCircle'
+// import AccountCircle from '@material-ui/icons/AccountCircle'
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -312,6 +313,15 @@ function Table() {
                 data={data}
                 columns={columns}
                 icons={tableIcons}
+                components={{
+                    Pagination: (props) => (
+                        <div>
+                            pagination
+                            <MTablePagination {...props} />
+                            <TablePagination {...props} />
+                        </div>
+                    ),
+                }}
                 editable={{
                     onBulkUpdate: (changes) =>
                         new Promise((resolve, reject) => {
@@ -374,24 +384,25 @@ function Table() {
                             )
                         },
                     },
-                    {
-                        icon: () => <AccountCircle />,
-                        tooltip: 'Show Surname',
-                        render: (rowData) => {
-                            return (
-                                <div
-                                    style={{
-                                        fontSize: 100,
-                                        textAlign: 'center',
-                                        color: 'white',
-                                        backgroundColor: '#E53935',
-                                    }}
-                                >
-                                    {rowData.surname}
-                                </div>
-                            )
-                        },
-                    },
+                    // para fazer um icone mostrando detalhes da tabela
+                    // {
+                    //     icon: () => <AccountCircle />,
+                    //     tooltip: 'Show Surname',
+                    //     render: (rowData) => {
+                    //         return (
+                    //             <div
+                    //                 style={{
+                    //                     fontSize: 100,
+                    //                     textAlign: 'center',
+                    //                     color: 'white',
+                    //                     backgroundColor: '#E53935',
+                    //                 }}
+                    //             >
+                    //                 {rowData.surname}
+                    //             </div>
+                    //         )
+                    //     },
+                    // },
                 ]}
                 options={{
                     search: true,
