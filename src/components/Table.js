@@ -60,9 +60,17 @@ const newData = []
 // se usar o options para alterar as cores, precisa usar essa constante abaixo
 // const selectedRow = []
 
+
 function Table() {
     const [data, setData] = useState(emplist)
     const [filter, setFilter] = useState(true)
+    const totalAmount = () => {
+        if(data.length > 0){
+            const valores = data.map(el => el.valor);
+            return valores.reduce((acc,curr) => acc + curr);
+        }
+        return 0
+    }
     const columns = [
         // {
         //     title: 'id',
@@ -449,7 +457,7 @@ function Table() {
                                 </Grid>
                                 <Grid sm={5} item>
                                     <Typography variant="subtitle1">
-                                        Valor Total:
+                                        Valor Total: {totalAmount()}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -543,7 +551,7 @@ function Table() {
                 options={{
                     search: true,
                     paging: true,
-                    filtering: true,
+                    filtering: filter,
                     exportButton: true,
                     toolbarButtonAlignment: 'left',
                     searchAutoFocus: true,
