@@ -3,7 +3,7 @@ import React from 'react'
 function Header() {
     return (
         <header>
-            <div className="titulo">
+            <div className="titulo" style={{ backgroundColor: 'black' }}>
                 <h1 style={{ color: 'yellow' }}>
                     {' '}
                     Cirurgias com Dr Eduardo Yassushi{' '}

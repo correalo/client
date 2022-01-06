@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { useState } from 'react'
 import '../App.css'
-import MaterialTable, { MTablePagination } from 'material-table'
-import { TablePagination } from '@material-ui/core'
-
+import MaterialTable from 'material-table'
+import { Grid, TablePagination, Typography, Divider } from '@material-ui/core'
+import { Checkbox } from '@material-ui/core'
 // import MaterialTable, { MTableToolbar } from 'material-table';
 
 import { forwardRef } from 'react'
@@ -22,6 +23,7 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
+
 // import AccountCircle from '@material-ui/icons/AccountCircle'
 
 const tableIcons = {
@@ -54,10 +56,13 @@ const tableIcons = {
 
 const emplist = []
 const newData = []
-const selectedRow = []
+
+// se usar o options para alterar as cores, precisa usar essa constante abaixo
+// const selectedRow = []
 
 function Table() {
     const [data, setData] = useState(emplist)
+    const [filter, setFilter] = useState(true)
     const columns = [
         // {
         //     title: 'id',
@@ -82,17 +87,30 @@ function Table() {
         //     },
         // },
         {
-            title: 'Nome',
-            field: 'nome',
+            title: 'Nome do Paciente',
+            field: 'name',
             type: 'text',
-            validate: (rowData) => rowData.name !== '',
+            validate: (rowData) => {
+                if (rowData.name === undefined || rowData.name === '') {
+                    return 'preencha o nome do paciente!'
+                } else if (rowData.name.length < 3) {
+                    return 'O nome precisa ter 3 caracteres ao menos'
+                }
+                return true
+            },
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
                 textAlign: 'center',
                 align: 'center',
                 color: '#0f3057',
                 width: '20%',
-                validate: (rowData) => rowData.dataDeCirurgia !== '',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
@@ -107,12 +125,34 @@ function Table() {
             title: 'Data de Cirurgia',
             field: 'dataDeCirurgia',
             type: 'date',
+            sorting: true,
+            validate: (rowData) => {
+                if (
+                    rowData.dataDeCirurgia === undefined ||
+                    rowData.dataDeCirurgia === ''
+                ) {
+                    return 'Escolha a Data!'
+                } else if (
+                    rowData.dataDeCirurgia !== '' &&
+                    rowData.dataDeCirurgia === 'DD.MM.YYYY.'
+                ) {
+                    return true
+                }
+                return true
+            },
+
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
                 textAlign: 'center',
                 color: '#0f3057',
                 width: '12%',
-                validate: (rowData) => rowData.dataDeCirurgia !== '',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
@@ -159,16 +199,32 @@ function Table() {
                 29: 'LAPAROTOMIA EXPLORADORA',
                 30: 'RETOSSIGMOIDECTOMIA',
             },
+            validate: (rowData) => {
+                if (
+                    rowData.tipoDeCirurgia === undefined ||
+                    rowData.tipoDeCirurgia === ''
+                ) {
+                    return 'Escolha o nome do procedimento!'
+                }
+                return true
+            },
 
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
                 textAlign: 'left',
                 color: '#0f3057',
-                width: '30%',
+                width: '20%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
-                textAlign: 'left',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
@@ -216,15 +272,28 @@ function Table() {
                 34: 'UNIMED PAULISTANA',
                 35: 'SEGUROS UNIMED',
             },
+            validate: (rowData) => {
+                if (rowData.convenio === undefined || rowData.convenio === '') {
+                    return 'Escolha o Convênio!'
+                }
+                return true
+            },
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
                 textAlign: 'left',
                 color: '#0f3057',
                 width: '18%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
-                textAlign: 'left',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
@@ -235,11 +304,22 @@ function Table() {
             title: 'Valor',
             field: 'valor',
             type: 'currency',
+            validate: (rowData) => ({
+                isValid: true,
+                helperText: 'Opcional',
+            }),
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
                 textAlign: 'left',
                 color: '#0f3057',
-                width: '8%',
+                width: '15%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
@@ -247,34 +327,66 @@ function Table() {
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
-                width: '8%',
+                width: '15%',
             },
         },
         {
             title: 'Recebido Por',
             field: 'recebidoPor',
             lookup: { hospital: 'HOSPITAL', consultorio: 'CONSULTÓRIO' },
+            validate: (rowData) => {
+                if (
+                    rowData.recebidoPor === undefined ||
+                    rowData.recebidoPor === ''
+                ) {
+                    return 'Escolha a Fonte Pagadora!'
+                }
+                return true
+            },
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
                 textAlign: 'left',
                 color: '#0f3057',
                 width: '12%',
             },
             headerStyle: {
                 backgroundColor: '#1E90FF',
-                textAlign: 'left',
+                textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
                 fontWeight: 'bold',
                 width: '12%',
             },
         },
+
         {
             title: 'Pago',
             field: 'pago',
-            lookup: { sim: 'SIM', nao: 'NÃO' },
+            lookup: { SIM: 'SIM', NÃO: 'NÃO' },
+
+            validate: (rowData) => {
+                if (rowData.pago === undefined || rowData.pago === '') {
+                    return 'Escolha Sim ou Não!'
+                }
+                return true
+            },
             cellStyle: {
-                backgroundColor: '#E8E8E8',
+                backgroundColor: (rowData) => {
+                    if (rowData.pago === 'SIM') {
+                        return (backgroundColor = 'green')
+                    } else if (rowData.pago === 'NÃO') {
+                        return (backgroundColor = 'red')
+                    }
+                    return (BackgroundColor = '#E8E8E8')
+                },
+
                 textAlign: 'left',
                 color: '#0f3057',
                 width: '3%',
@@ -290,17 +402,27 @@ function Table() {
             },
         },
     ]
+    const handleChange = () => {
+        setFilter(!filter)
+    }
+
     return (
         <div
             className="Table"
             style={{
-                maxWidth: '99,5%',
+                maxWidth: '98,5%',
                 margin: 'auto',
-                padding: 2,
+                padding: 5,
                 Color: 'grey',
                 backgroundColor: 'grey',
             }}
         >
+            <Checkbox
+                style={{ color: 'blue', position: 'rigth' }}
+                checked={filter}
+                onChange={handleChange}
+                inputProps={{ 'aria-label': 'secondary checkbox' }}
+            />
             <MaterialTable
                 title="Cirurgias Realizadas"
                 style={{
@@ -315,11 +437,25 @@ function Table() {
                 icons={tableIcons}
                 components={{
                     Pagination: (props) => (
-                        <div>
-                            pagination
-                            <MTablePagination {...props} />
+                        <>
+                            <Grid
+                                container
+                                style={{ padding: 15, background: '#f5f5f5' }}
+                            >
+                                <Grid sm={7} item>
+                                    <Typography variant="subtitle1">
+                                        Número de Cirurgias : {props.count}
+                                    </Typography>
+                                </Grid>
+                                <Grid sm={5} item>
+                                    <Typography variant="subtitle1">
+                                        Valor Total:
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            <Divider />
                             <TablePagination {...props} />
-                        </div>
+                        </>
                     ),
                 }}
                 editable={{
@@ -413,12 +549,19 @@ function Table() {
                     searchAutoFocus: true,
                     cellStyle: { minWidth: '100px', maxWidth: '100px' },
                     selection: true,
-                    rowStyle: (rowData) => ({
-                        backgroundColor:
-                            selectedRow === rowData.tableData.id
-                                ? '#EEE'
-                                : '#FFF',
-                    }),
+                    rowStyle: (rowData) => {
+                        if (rowData.pago === 'SIM') {
+                            return { backgroundColor: 'green' }
+                        }
+                        return { backgroundColor: 'red' }
+                    },
+
+                    // ({
+                    //     backgroundColor:
+                    //         selectedRow === rowData.tableData.id
+                    //             ? '#EEE'
+                    //             : '#FFF',
+                    // }),
                 }}
                 cellEditable={{
                     cellStyle: {},
