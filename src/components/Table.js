@@ -1,9 +1,9 @@
 /* eslint-disable no-undef */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../App.css'
 import MaterialTable from 'material-table'
 import { Grid, TablePagination, Typography, Divider } from '@material-ui/core'
-import { Checkbox } from '@material-ui/core'
+import { Checkbox, Select, MenuItem } from '@material-ui/core'
 // import MaterialTable, { MTableToolbar } from 'material-table';
 
 import { forwardRef } from 'react'
@@ -23,6 +23,7 @@ import Remove from '@material-ui/icons/Remove'
 import SaveAlt from '@material-ui/icons/SaveAlt'
 import Search from '@material-ui/icons/Search'
 import ViewColumn from '@material-ui/icons/ViewColumn'
+// import { months } from 'moment'
 
 // import AccountCircle from '@material-ui/icons/AccountCircle'
 
@@ -60,40 +61,26 @@ const newData = []
 // se usar o options para alterar as cores, precisa usar essa constante abaixo
 // const selectedRow = []
 
-
 function Table() {
     const [data, setData] = useState(emplist)
     const [filter, setFilter] = useState(true)
+
+    // ano e mês do select e se colocar ao invés de true, colocar "all",
+    //  vai setar "todos" como valor inicial
+    const [year, setYear] = useState('all')
+    const [months, setMonths] = useState('all')
+    // logica do filtro mês e ano
+    const [filteredData, setFilteredData] = useState(emplist)
+
+    // cálculo do total de valores, usando reduce
     const totalAmount = () => {
-        if(data.length > 0){
-            const valores = data.map(el => el.valor);
-            return valores.reduce((acc,curr) => acc + curr);
+        if (data.length > 0) {
+            const valores = data.map((el) => el.valor)
+            return valores.reduce((acc, curr) => acc + curr)
         }
         return 0
     }
     const columns = [
-        // {
-        //     title: 'id',
-        //     field: 'id',
-        //     edditable: false,
-        //     align: 'center',
-        //     lookup: '',
-        //     type: 'integer',
-        //     cellStyle: {
-        //         backgroundColor: '#85929E',
-        //         textAlign: 'center',
-        //         color: '#0f3057',
-        //         width: '5%',
-        //     },
-        //     headerStyle: {
-        //         backgroundColor: '#333FFF',
-        //         textAlign: 'center',
-        //         color: '#FFF',
-        //         fontSize: 15,
-        //         width: '5%',
-        //         fontWeight: 'bold',
-        //     },
-        // },
         {
             title: 'Nome do Paciente',
             field: 'name',
@@ -121,7 +108,7 @@ function Table() {
                 width: '20%',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
@@ -163,7 +150,7 @@ function Table() {
                 width: '12%',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
@@ -231,7 +218,7 @@ function Table() {
                 width: '20%',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
@@ -300,7 +287,7 @@ function Table() {
                 width: '18%',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
@@ -330,7 +317,7 @@ function Table() {
                 width: '15%',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'left',
                 color: '#FFF',
                 fontSize: 14,
@@ -365,7 +352,7 @@ function Table() {
                 width: '12%',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'center',
                 color: '#FFF',
                 fontSize: 14,
@@ -401,7 +388,7 @@ function Table() {
                 sorting: 'boolean',
             },
             headerStyle: {
-                backgroundColor: '#1E90FF',
+                backgroundColor: '#0c3aa7',
                 textAlign: 'left',
                 color: '#FFF',
                 fontSize: 14,
@@ -413,7 +400,13 @@ function Table() {
     const handleChange = () => {
         setFilter(!filter)
     }
-
+    useEffect(() => {
+        setFilteredData(
+            year === 'todos'
+                ? emplist
+                : emplist.filter((dt) => dt.year === year)
+        )
+    }, [year])
     return (
         <div
             className="Table"
@@ -425,12 +418,46 @@ function Table() {
                 backgroundColor: 'grey',
             }}
         >
-            <Checkbox
-                style={{ color: 'blue', position: 'rigth' }}
-                checked={filter}
-                onChange={handleChange}
-                inputProps={{ 'aria-label': 'secondary checkbox' }}
-            />
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                style={{ width: 70 }}
+                value={year}
+                label="Ano"
+                onChange={(e) => setYear(e.target.value)}
+            >
+                <MenuItem value={' all'}>
+                    <em>Todos</em>
+                </MenuItem>
+                <MenuItem value={2021}>2021</MenuItem>
+                <MenuItem value={2022}>2022</MenuItem>
+                <MenuItem value={2023}>2023</MenuItem>
+                <MenuItem value={2024}>2024</MenuItem>
+            </Select>
+            <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                style={{ width: 110 }}
+                value={months}
+                label="Mês"
+                onChange={(e) => setMonths(e.target.value)}
+            >
+                <MenuItem value={'all'}>
+                    <em>Todos</em>
+                </MenuItem>
+                <MenuItem value={0}>Janeiro</MenuItem>
+                <MenuItem value={1}>Fevereiro</MenuItem>
+                <MenuItem value={2}>Março</MenuItem>
+                <MenuItem value={3}>Abril</MenuItem>
+                <MenuItem value={4}>Maio</MenuItem>
+                <MenuItem value={5}>Junho</MenuItem>
+                <MenuItem value={6}>Julho</MenuItem>
+                <MenuItem value={7}>Agosto</MenuItem>
+                <MenuItem value={8}>Setembro</MenuItem>
+                <MenuItem value={9}>Outubro</MenuItem>
+                <MenuItem value={10}>Novembro</MenuItem>
+                <MenuItem value={11}>Dezembro</MenuItem>
+            </Select>
             <MaterialTable
                 title="Cirurgias Realizadas"
                 style={{
@@ -440,7 +467,7 @@ function Table() {
                     fontSize: 14,
                     color: 'blue',
                 }}
-                data={data}
+                data={filteredData}
                 columns={columns}
                 icons={tableIcons}
                 components={{
@@ -448,7 +475,10 @@ function Table() {
                         <>
                             <Grid
                                 container
-                                style={{ padding: 15, background: '#f5f5f5' }}
+                                style={{
+                                    padding: 15,
+                                    background: '#f5f5f5',
+                                }}
                             >
                                 <Grid sm={7} item>
                                     <Typography variant="subtitle1">
@@ -456,8 +486,11 @@ function Table() {
                                     </Typography>
                                 </Grid>
                                 <Grid sm={5} item>
-                                    <Typography variant="subtitle1">
-                                        Valor Total: {totalAmount()}
+                                    <Typography
+                                        variant="subtitle1"
+                                        type="currency"
+                                    >
+                                        Valor Total: {totalAmount()}{' '}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -549,19 +582,29 @@ function Table() {
                     // },
                 ]}
                 options={{
+                    icon: () => (
+                        <Checkbox
+                            style={{ color: 'blue' }}
+                            checked={filter}
+                            onChange={handleChange}
+                            inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        />
+                    ),
+                    tooltip: 'Hide/Show Filter option',
+                    IsFreeAction: true,
                     search: true,
                     paging: true,
                     filtering: filter,
                     exportButton: true,
-                    toolbarButtonAlignment: 'left',
+                    toolbarButtonAlignment: 'right',
                     searchAutoFocus: true,
                     cellStyle: { minWidth: '100px', maxWidth: '100px' },
                     selection: true,
                     rowStyle: (rowData) => {
                         if (rowData.pago === 'SIM') {
-                            return { backgroundColor: 'green' }
+                            return { backgroundColor: '#9BE37E' }
                         }
-                        return { backgroundColor: 'red' }
+                        return { backgroundColor: '#FA3844' }
                     },
 
                     // ({
